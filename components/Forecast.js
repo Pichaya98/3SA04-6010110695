@@ -1,14 +1,18 @@
-import React from 'react';
-import { StyleSheet, Text, View, ImageBackground } from 'react-native';
-export default class Forecast extends React.Component {
-    render() {
-        return (
-        <View>
-            <Text style={styles.bea}>{this.props.main}</Text>
-            <Text style={styles.bea}>{this.props.description}</Text>
-            <Text style={styles.bea}>{this.props.temp}</Text>
-            <Text style={styles.bea}>°C</Text>
-        </View>
+import React, { Component } from "react";
+import { StyleSheet, Text, View, TextInput, Animated } from "react-native";
+
+export default class Forecast extends React.Component{
+    render(){
+        return(
+            <View style={styles.container}>
+                <Text style={styles.bea}>{this.props.location}</Text>
+                <Text style={styles.bea}>{this.props.main}</Text>
+                <Text style={styles.bea}>สถานะ : {this.props.description}</Text>
+                <Text style={styles.bea}>อุณหภูมิ : {this.props.temp} °C</Text>
+                <Text style={styles.bea}>ความชื้นสัมพัทธ์ : {this.props.humidity}%</Text>
+                <Text style={styles.bea}>อุณหภูมิสูงสุด : {this.props.temp_max} °C</Text>
+                <Text style={styles.bea}>อุณหภูมิต่ำสุด : {this.props.temp_min} °C</Text>
+            </View>
         );
     }
 }
@@ -31,7 +35,7 @@ const styles = StyleSheet.create({
         alignItems:'center',
     },
 
-    bea: {fontSize:40},
+    bea: {fontSize:30 },
     
    });
    

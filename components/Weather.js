@@ -1,39 +1,57 @@
-import React from 'react';
-import { StyleSheet, Text, View, ImageBackground } from 'react-native';
-import Forecast from './Forecast'
-import { red } from 'ansi-colors';
-export default class Weather extends React.Component {
-    constructor(props) {
+  
+import React, { Component } from "react";
+import { StyleSheet, Text, View, TextInput, Animated, ImageBackground } from "react-native";
+import Forecast from "./Forecast";
+export default class Weather extends React.Component{
+    constructor(props){
         super(props);
         this.state = {
-            forecast: {
-                main: '-', description: '-', temp: 0
+            forecast:{
+                location:'-',
+                main: '-',
+                description: '-',
+                humidity: 0,
+                temp: 0,
+                temp_max:0,
+                temp_min:0
             }
         }
     }
-
+    
     fetchData = () => {
-            fetch(`http://api.openweathermap.org/data/2.5/weather?q=${this.props.zipCode},th&units=metric&APPID=fd68c0f2039c5a25f666a9ff374bc93e`)
-            .then((response) => response.json())
-            .then((json) => {
+        fetch(`http://api.openweathermap.org/data/2.5/weather?q=${this.props.zipCode},th&units=metric&APPID=fd68c0f2039c5a25f666a9ff374bc93e`)
+        .then((respose) => respose.json())
+        .then((json) => {
+            console.log(json)
                 this.setState(
-                    {
-                        forecast: {
-                            main: json.weather[0].main,
-                            description: json.weather[0].description,
-                            temp: json.main.temp
-                        }
-                    });
-            })
-            .catch((error) => {
-            console.warn(error);
-            });
-        }
-           
-            componentDidMount = () => this.fetchData() 
+                {
+                    forecast:{
+                        location: json.name,
+                        main: json.weather[0].main,
+                        description: json.weather[0].description,
+                        temp: json.main.temp,
+                        humidity: json.main.humidity,
+                        temp_max: json.main.temp_max,
+                        temp_min: json.main.temp_min,
 
-    render() {
-        
+                    }
+                }
+            );
+        })
+        .catch((error) => {
+            console.warn(error);
+        })
+    }
+    
+    componentDidMount = () => this.fetchData()
+
+    componentDidUpdate = (prevProps) =>{
+        if(prevProps.zipCode !== this.props.zipCode){
+            this.fetchData()
+        }
+    }
+
+    render(){
         return (
             <View style={styles.container}>
                 <ImageBackground source={require('../bgSky_Xr.jpg')} style={styles.backdrop}>
@@ -42,33 +60,31 @@ export default class Weather extends React.Component {
                     
                 </ImageBackground>
             </View>
-            
-                
-               
         );
     }
 }
-   const styles = StyleSheet.create({
 
-    container: { 
-        // paddingTop: 25,
-        //flex: 1,
-        // marginLeft: 24,
-        // marginRight: 24,
-        // marginBottom: 24
-
+const styles = StyleSheet.create({
+    container: {
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
-    backdrop: { 
-        
+    backdrop:{
+       
         width: '100%',
         height: '100%',
         flexDirection:'column',
         justifyContent:'center',
         alignItems:'center',
     },
+    zipcodetext:{
+        backgroundColor: '#555555',
+        opacity: 0.75,  
+        fontSize : 35,
+        paddingTop: 28,
+    },
 
-    bea: {fontSize:40},
-    
-   });
-   
-   
+    bea: {fontSize:30 },
+
+  });
